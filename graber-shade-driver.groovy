@@ -41,7 +41,7 @@ metadata {
 			name: "Graber Shade Driver",
 			namespace: "tyuhl",
 			description:"Driver for Graber Z-Wave Shades",
-			importUrl:"https://raw.githubusercontent.com/tyuhl/GraberShades/main/graber-shade-driver.groovy",
+			importUrl:"https://raw.githubusercontent.com/tyuhl/GraberShade/main/graber-shade-driver.groovy",
 			author: "Tim Yuhl") {
 		capability "WindowShade"
 		capability "Switch"
