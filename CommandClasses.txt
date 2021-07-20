@@ -1,0 +1,39 @@
+
+From inClusters:
+
+0x5E  //Z-WavePlusInfo
+
+0x26  //SwitchMultiLevel
+
+0x85  //Association
+
+0x59  //AssociationGroupInfo
+
+0x72  //ManufacturerSpecific
+
+0x86  //Version
+
+0x5A  //ResetLocally
+
+0x73  //PowerLevel
+
+0x7A  //FirmwareUpdate
+
+0x6C  //Supervision
+
+0x55  //TransportService
+
+0x80  // Battery
+
+inClusters reported in driver screen:
+
+53 BC 00 04 11 07 5E 26 85 5C 59 72 86 5A 73 7A 6C 55 80 68 23
+
+Graber Driver Command Buttons:
+
+Close, Configure, Initialize, Off, On, Open, Refresh, Set Level, Set Position, 
+Start Position Change (open, close), Stop Position Change
+
+Generic Z-Wave Shade Command Buttons:
+Close, Configure, Off, On, Open, Refresh, Set Position,
+Start Position Change (open, close), Stop Position Change
