@@ -27,7 +27,6 @@ import groovy.transform.Field
 		0x20: 1,    //basic
 		0x26: 1,    //switchMultiLevel
 		0x5E: 2,    // ZwavePlusInfo
-		0x70: 1,    // Configuration
 		0x80: 1     // Battery
 ]
 
@@ -42,7 +41,7 @@ metadata {
 			name: "Graber Shade Driver",
 			namespace: "tyuhl",
 			description:"Driver for Graber Z-Wave Shades",
-			importUrl:"",
+			importUrl:"https://raw.githubusercontent.com/tyuhl/GraberShades/main/graber-shade-driver.groovy",
 			author: "Tim Yuhl") {
 		capability "WindowShade"
 		capability "Switch"
@@ -53,9 +52,6 @@ metadata {
 		capability "Refresh"
 
 		fingerprint deviceId: "5A31", inClusters: "0x5E,0x26,0x85,0x59,0x72,0x86,0x5A,0x73,0x7A,0x6C,0x55,0x80", mfr: "26E", deviceJoinName: "Graber Shade"
-//		fingerprint deviceId: "0x1107", inClusters: "0x5E,0x26", deviceJoinName: "Window Treatment" //Window Shade
-//		fingerprint deviceId: "0x9A00", inClusters: "0x5E,0x26", deviceJoinName: "Window Treatment" //Window Shade
-
 	}
 	preferences {
 		section("Logging") {
@@ -70,21 +66,16 @@ metadata {
 
 void installed()
 {
-	log("installed called", "trace")
+	log("installed() called", "trace")
 	setVersion()
 	initialize()
 }
 
 void updated()
 {
-	log("updated called", "trace")
+	log("updated() called", "trace")
 	setVersion()
 	initialize()
-}
-
-void initialize() {
-	refresh()
-	scheduleBatteryReport()
 }
 
 void parse(String message)
@@ -97,6 +88,15 @@ void parse(String message)
 }
 
 /* End of built-in callbacks */
+
+///
+// Commands
+///
+void initialize() {
+	log("initialize() called", "trace")
+	refresh()
+	scheduleBatteryReport()
+}
 
 void refresh()
 {
@@ -147,9 +147,9 @@ def stopPositionChange() {
 	}
 }
 
-//
+///
 // Event Handlers
-//
+///
 def zwaveEvent(hubitat.zwave.commands.batteryv1.BatteryReport cmd) {
 	log("BatteryReport $cmd", "trace")
 	def val = (cmd.batteryLevel == 0xFF ? 1 : cmd.batteryLevel)
@@ -178,10 +178,9 @@ void zwaveEvent(hubitat.zwave.Command cmd) {
 	log("Command Unhandled: $cmd", "trace")
 }
 
-//
+///
 // Supporting helpers
-//
-
+///
 void getBatteryReport() {
 	log("getBatteryReport() called", "trace")
 	try {
