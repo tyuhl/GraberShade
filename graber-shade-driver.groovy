@@ -262,7 +262,7 @@ private shadeEvents(value, String type) {
 		switchText = "off"
 		shadeText = "closed"
 	} else {
-		positionText = "${device.getDisplayName()}is partially open"
+		positionText = "${device.getDisplayName()} is partially open"
 		shadeText = "partially open"
 	}
 	sendEvent(getEventMap("position", positionVal, "%", null, positionText, true))
