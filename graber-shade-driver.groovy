@@ -18,6 +18,7 @@
  *
  *  History:
  *  7/20/21 - Initial work.
+ *  8/1/21 - Added configurable battery report time
  *
  */
 
@@ -30,11 +31,13 @@ import groovy.transform.Field
 		0x80: 1     // Battery
 ]
 
-String appVersion()   { return "1.0.0" }
+String appVersion()   { return "1.0.1" }
 def setVersion(){
 	state.name = "Graber Shade Driver"
-	state.version = "1.0.0"
+	state.version = "1.0.1"
 }
+
+@Field static final String defaultTime = "0800"
 
 metadata {
 	definition (
@@ -54,6 +57,9 @@ metadata {
 		fingerprint deviceId: "5A31", inClusters: "0x5E,0x26,0x85,0x59,0x72,0x86,0x5A,0x73,0x7A,0x6C,0x55,0x80", mfr: "26E", deviceJoinName: "Graber Shade"
 	}
 	preferences {
+		section("Scheduled Time") {
+			input name: "sched_time", type: "time", title: "Daily Battery Check Time: ", defaultValue: "08:00 AM"
+		}
 		section("Logging") {
 			input "logging", "enum", title: "Log Level", required: false, defaultValue: "INFO", options: ["TRACE", "DEBUG", "INFO", "WARN", "ERROR"]
 		}
@@ -196,8 +202,16 @@ private void scheduleBatteryReport() {
 	// Test  - every 2 minutes
 	// def cronString = "0 */2 * ? * *"
 	// every day at 6:00 am
-	def cronString = "0 0 6 ? * *"
-	log("Scheduling Battery Refresh cronstring: ${cronString}", "trace" )
+	// def cronString = "0 0 6 ? * *"
+	def dt
+	if(sched_time != null) {
+		dt = toDateTime(sched_time)
+	}
+	else {
+		dt =  Date.parse("HHmm", defaultTime)
+	}
+	def cronString = dt.format("ss mm HH") + " ? * *"
+	log("Scheduling Battery Refresh cronstring: ${cronString}", "info" )
 	schedule(cronString, getBatteryReport)
 }
 
