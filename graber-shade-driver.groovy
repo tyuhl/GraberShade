@@ -19,6 +19,7 @@
  *  History:
  *  7/20/21 - Initial work.
  *  8/1/21 - Added configurable battery report time
+ *  8/18/23 - Added Battery Change Date preference
  *
  */
 
@@ -31,10 +32,10 @@ import groovy.transform.Field
 		0x80: 1     // Battery
 ]
 
-String appVersion()   { return "1.0.1" }
+String appVersion()   { return "1.0.2" }
 def setVersion(){
 	state.name = "Graber Shade Driver"
-	state.version = "1.0.1"
+	state.version = "1.0.2"
 }
 
 @Field static final String defaultTime = "0800"
@@ -59,6 +60,9 @@ metadata {
 	preferences {
 		section("Scheduled Time") {
 			input name: "sched_time", type: "time", title: "Daily Battery Check Time: ", defaultValue: "08:00 AM"
+		}
+		section("Battery Change Date") {
+			input name: "bat_chg-date", type: "date", title: "Date Batteries Changed:", defaultValue: "2023-01-01"
 		}
 		section("Logging") {
 			input "logging", "enum", title: "Log Level", required: false, defaultValue: "INFO", options: ["TRACE", "DEBUG", "INFO", "WARN", "ERROR"]
