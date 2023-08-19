@@ -39,6 +39,7 @@ def setVersion(){
 }
 
 @Field static final String defaultTime = "0800"
+@Field static final String defaultDate = "2023-01-01"
 
 metadata {
 	definition (
@@ -55,6 +56,7 @@ metadata {
 		capability "Sensor"
 		capability "Refresh"
 
+		attribute "BatteryDate", "string"
 		fingerprint deviceId: "5A31", inClusters: "0x5E,0x26,0x85,0x59,0x72,0x86,0x5A,0x73,0x7A,0x6C,0x55,0x80", mfr: "26E", deviceJoinName: "Graber Shade"
 	}
 	preferences {
@@ -62,7 +64,7 @@ metadata {
 			input name: "sched_time", type: "time", title: "Daily Battery Check Time: ", defaultValue: "08:00 AM"
 		}
 		section("Battery Change Date") {
-			input name: "bat_chg-date", type: "date", title: "Date Batteries Changed:", defaultValue: "2023-01-01"
+			input name: "bat_chg_date", type: "date", title: "Date Batteries Changed:", defaultValue: defaultDate
 		}
 		section("Logging") {
 			input "logging", "enum", title: "Log Level", required: false, defaultValue: "INFO", options: ["TRACE", "DEBUG", "INFO", "WARN", "ERROR"]
@@ -106,6 +108,7 @@ void initialize() {
 	log("initialize() called", "trace")
 	refresh()
 	scheduleBatteryReport()
+	populateBatteryDate()
 }
 
 void refresh()
@@ -199,6 +202,19 @@ void getBatteryReport() {
 	catch(e) {
 		log("unhandled error: ${e.getLocalizedMessage()}", "error")
 	}
+}
+
+private void populateBatteryDate()
+{
+	Date dateBC
+	if (bat_chg_date != null) {
+		dateBC = Date.parse("yyyy-MM-dd", bat_chg_date.toString())
+	}
+	else {
+		dateBC = Date.parse("yyyy-MM-dd", defaultDate)
+	}
+	String theDate =  dateBC.format(dateBC.getDateString())
+	sendEvent(name:"BatteryDate", value: theDate)
 }
 
 private void scheduleBatteryReport() {
